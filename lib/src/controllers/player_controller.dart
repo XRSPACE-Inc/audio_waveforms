@@ -145,6 +145,18 @@ class PlayerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> preparePlayerWithWaveform({
+    required List<double> waveformData,
+    int maxDuration = 0,
+  }) async {
+    _maxDuration = maxDuration;
+    _setPlayerState(PlayerState.initialized);
+    _waveformData
+      ..clear()
+      ..addAll(waveformData);
+    notifyListeners();
+  }
+
   /// Extracts waveform data from provided audio file path.
   /// [noOfSamples] indicates number of extracted data points. This will
   /// determine number of bars in the waveform.
@@ -198,6 +210,12 @@ class PlayerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void startPlayeWithoutAudio() {
+    _setPlayerState(PlayerState.playing);
+    _setRefresh(true);
+    notifyListeners();
+  }
+
   /// Pauses currently playing audio.
   Future<void> pausePlayer() async {
     final isPaused =
@@ -208,6 +226,11 @@ class PlayerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void pausePlayerWithoutAudio() {
+    _setPlayerState(PlayerState.paused);
+    notifyListeners();
+  }
+
   /// A function to stop player. After calling this.
   Future<void> stopPlayer() async {
     final isStopped =
@@ -215,6 +238,11 @@ class PlayerController extends ChangeNotifier {
     if (isStopped) {
       _setPlayerState(PlayerState.stopped);
     }
+    notifyListeners();
+  }
+
+  void stopPlayerWithoutAudio() {
+    _setPlayerState(PlayerState.stopped);
     notifyListeners();
   }
 
